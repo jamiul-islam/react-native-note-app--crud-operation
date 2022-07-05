@@ -9,11 +9,53 @@ import {
 } from "react-native";
 import Text from "../components/text/text";
 import { colors, spacing } from "../themes";
+import initAuthentication from "../config/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "@firebase/firestore";
+import { db } from "../config/firebase";
 
 const genderOptions = ["Male", "Female"];
 
+initAuthentication();
+const auth = getAuth();
+
 export default function SignUp({ navigation }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [age, setAge] = React.useState("");
+  const [name, setName] = React.useState("");
   const [gender, setGender] = React.useState(null);
+
+  const handleSignUp = async () => {
+    try {
+      // 1. create user with email and password
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(result.user);
+
+      // 2. add user to fireStore database
+      await addDoc(collection(db, "users"), {
+        name: name,
+        email: email,
+        age: age,
+        gender: gender,
+        uid: result.user.uid,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -23,35 +65,64 @@ export default function SignUp({ navigation }) {
       </Text>
       <View style={styles.inputView}>
         {/* ---------------email--------------- */}
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          autoCapitalize="none"
+          style={styles.input}
+          onChangeText={(text) => setEmail(text)}
+        />
         {/* ---------------password--------------- */}
         <TextInput
+          onChangeText={(text) => setPassword(text)}
           placeholder="password"
           style={styles.input}
           secureTextEntry
         />
         {/* ---------------full name--------------- */}
-        <TextInput placeholder="Full Name" style={styles.input} />
+        <TextInput
+          onChangeText={(text) => setName(text)}
+          placeholder="Full Name"
+          style={styles.input}
+        />
         {/* ---------------age--------------- */}
-        <TextInput placeholder="Age" style={styles.input} />
+        <TextInput
+          onChangeText={(text) => setAge(text)}
+          placeholder="Age"
+          style={styles.input}
+        />
         {/* ---------------male/female--------------- */}
-        {genderOptions.map((option) => (
-          <TouchableOpacity key={option} style={styles.radioContainer}>
-            <View
-              style={[styles.outerCircle, selected && styles.selectOuterCircle]}
+        <View>
+          <Text preset="small;" style={{ color: "black", marginVertical: 10 }}>
+            Select Gender
+          </Text>
+        </View>
+        {genderOptions.map((option) => {
+          const selected = option === gender;
+          return (
+            <TouchableOpacity
+              onPress={() => setGender(option)}
+              key={option}
+              style={styles.radioContainer}
             >
               <View
                 style={[
-                  styles.innerCircle,
-                  selected && styles.selectInnerCircle,
+                  styles.outerCircle,
+                  selected && styles.selectOuterCircle,
                 ]}
-              />
-            </View>
-            <Text preset="">{option}</Text>
-          </TouchableOpacity>
-        ))}
+              >
+                <View
+                  style={[
+                    styles.innerCircle,
+                    selected && styles.selectInnerCircle,
+                  ]}
+                />
+              </View>
+              <Text preset="">{option}</Text>
+            </TouchableOpacity>
+          );
+        })}
         {/* ---------------submit--------------- */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSignUp()}>
           <Text preset="h4" style={styles.loginButton}>
             Submit
           </Text>

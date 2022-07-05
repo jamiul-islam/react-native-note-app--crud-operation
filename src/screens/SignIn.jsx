@@ -5,12 +5,31 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import Text from "../components/text/text";
 import { colors, spacing } from "../themes";
+import initAuthentication from "../config/firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+initAuthentication();
+const auth = getAuth();
 
 export default function SignIn({ navigation }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const handleSignIn = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("successfully signed in", user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -21,13 +40,18 @@ export default function SignIn({ navigation }) {
         Never Forget your Notes
       </Text>
       <View style={styles.inputView}>
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          onChangeText={(text) => setEmail(text)}
+        />
         <TextInput
           placeholder="password"
           style={styles.input}
           secureTextEntry
+          onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSignIn()}>
           <Text preset="h4" style={styles.loginButton}>
             Login
           </Text>

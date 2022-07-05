@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
@@ -9,6 +15,9 @@ import SignIn from "./src/screens/SignIn";
 import signup from "./src/screens/SignUp";
 import Edit from "./src/screens/Edit";
 import Create from "./src/screens/Create";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+const auth = getAuth();
 
 // custom white theme
 const AppTheme = {
@@ -22,8 +31,23 @@ const AppTheme = {
 const Stack = createNativeStackNavigator();
 
 function App() {
+  // sign out
+  // useEffect(() => {
+  //   signOut(auth);
+  // }, []);
+
   // user authentication
-  const user = false;
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const authSub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return authSub;
+  }, []);
 
   // load google fonts
   const [appIsReady, setAppIsReady] = useState(false);
@@ -64,15 +88,18 @@ function App() {
               <Stack.Screen
                 name="Home"
                 component={Home}
+                user={user}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="Edit"
+                user={user}
                 component={Edit}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="Create"
+                user={user}
                 component={Create}
                 options={{ headerShown: false }}
               />
@@ -80,14 +107,14 @@ function App() {
           ) : (
             <>
               <Stack.Screen
-                name="SignUp"
-                component={signup}
-                options={{ headerShown: true }}
-              />
-              <Stack.Screen
                 name="SignIn"
                 component={SignIn}
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="SignUp"
+                component={signup}
+                options={{ headerShown: true }}
               />
             </>
           )}
