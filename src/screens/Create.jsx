@@ -6,7 +6,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { showMessage } from "react-native-flash-message";
 
-const noteColors = Object.keys(colors).slice(0, 6);
+const noteColors = Object.keys(colors).slice(0, 7);
 
 export default function Create({ navigation, user }) {
   const [title, setTitle] = React.useState("");

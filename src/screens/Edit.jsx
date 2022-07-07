@@ -2,23 +2,22 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { colors, spacing } from "../themes";
 import Text from "../components/text/text";
-import { collection, updateDoc } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { showMessage } from "react-native-flash-message";
 
-const noteColors = Object.keys(colors).slice(0, 6);
+const noteColors = Object.keys(colors).slice(0, 7);
 
 export default function Edit({ navigation, user, route }) {
-  const note = route.params.note;
-  // console.log(route.params.note.id);
+  const noteItem = route.params.note;
+  const [title, setTitle] = React.useState(noteItem.title);
+  const [description, setDescription] = React.useState(noteItem.description);
+  const [noteColor, setNoteColor] = React.useState(noteItem.color);
 
-  const [title, setTitle] = React.useState(note.title);
-  const [description, setDescription] = React.useState(note.description);
-  const [noteColor, setNoteColor] = React.useState(note.color);
   const handleEdit = async () => {
     try {
       // create operation of CRUD
-      await updateDoc(collection(db, "notes"), note.id, {
+      await updateDoc(doc(db, "notes"), noteItem.title, {
         title: title,
         description: description,
         color: noteColor,

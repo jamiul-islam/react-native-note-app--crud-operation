@@ -6,12 +6,15 @@ import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import {
   collection,
+  deleteDoc,
+  doc,
   onSnapshot,
   query,
   QuerySnapshot,
   where,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { async } from "@firebase/util";
 
 export default function Home({ navigation, user }) {
   const [notes, setNotes] = React.useState([]);
@@ -23,7 +26,6 @@ export default function Home({ navigation, user }) {
     const notesListenerSubscription = onSnapshot(q, (QuerySnapshot) => {
       const List = [];
       QuerySnapshot.forEach((doc) => {
-        console.log(doc.id);
         List.push({ id: doc.id, ...doc.data() });
       });
       setNotes(List);
@@ -33,6 +35,12 @@ export default function Home({ navigation, user }) {
 
   const renderItem = (i) => {
     const note = i.item;
+
+    // deleting a data || D method of CRUD Operation
+    const handleDelete = async () => {
+      await deleteDoc(doc(db, "notes", note.id));
+    };
+
     return (
       <TouchableHighlight
         style={{
@@ -77,12 +85,14 @@ export default function Home({ navigation, user }) {
                 color="white"
               />
             </TouchableHighlight>
-            <AntDesign
-              style={{ marginVertical: 5 }}
-              name="delete"
-              size={20}
-              color="white"
-            />
+            <TouchableHighlight onPress={() => handleDelete()}>
+              <AntDesign
+                style={{ marginVertical: 5 }}
+                name="delete"
+                size={20}
+                color="white"
+              />
+            </TouchableHighlight>
           </View>
         </View>
       </TouchableHighlight>
