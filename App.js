@@ -85,24 +85,15 @@ function App() {
         <Stack.Navigator>
           {user ? (
             <>
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                user={user}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Edit"
-                user={user}
-                component={Edit}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Create"
-                user={user}
-                component={Create}
-                options={{ headerShown: false }}
-              />
+              <Stack.Screen name="Home" options={{ headerShown: false }}>
+                {(props) => <Home {...props} user={user} />}
+              </Stack.Screen>
+              <Stack.Screen name="Edit" options={{ headerShown: true }}>
+                {(props) => <Edit {...props} user={user} />}
+              </Stack.Screen>
+              <Stack.Screen name="Create" options={{ headerShown: true }}>
+                {(props) => <Create {...props} user={user} />}
+              </Stack.Screen>
             </>
           ) : (
             <>
