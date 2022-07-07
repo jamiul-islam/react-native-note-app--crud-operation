@@ -23,7 +23,6 @@ export default function SignIn({ navigation }) {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log("successfully signed in", user);
       })
       .catch((error) => {
         console.log(error.message);
@@ -33,7 +32,7 @@ export default function SignIn({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        style={{ alignSelf: "center" }}
+        style={{ alignSelf: "center", marginTop: 15 }}
         source={require("../../assets/empty-state.png")}
       />
       <Text preset="h1" style={{ color: colors.white, alignSelf: "center" }}>
@@ -76,20 +75,19 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: colors.white,
+    borderColor: colors.gray,
     borderBottomWidth: 1,
     marginBottom: 20,
   },
   inputView: {
-    marginTop: spacing[8],
     paddingHorizontal: 25,
     paddingVertical: 15,
   },
   loginButton: {
-    color: colors.black,
+    color: colors.white,
     alignSelf: "center",
     marginTop: spacing[8],
-    backgroundColor: colors.lightGreen,
+    backgroundColor: colors.green,
     paddingVertical: 10,
     paddingHorizontal: 25,
     borderRadius: 30,

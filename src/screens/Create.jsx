@@ -1,4 +1,11 @@
-import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { colors, spacing } from "../themes";
 import Text from "../components/text/text";
@@ -32,63 +39,79 @@ export default function Create({ navigation, user }) {
   };
 
   return (
-    <View>
-      <TextInput
-        style={styles.input}
-        placeholder="Title"
-        onChangeText={(text) => setTitle(text)}
-      />
-      <TextInput
-        placeholder="Description"
-        style={styles.input}
-        onChangeText={(text) => setDescription(text)}
-        multiline={true}
-      />
-      <View style={{ marginLeft: 15 }}>
-        <View>
-          <Text preset="h4" style={{ color: colors.grey, marginVertical: 10 }}>
-            Select your note color
-          </Text>
-        </View>
-        {noteColors.map((option) => {
-          const selected = option === noteColor;
-          return (
-            <TouchableOpacity
-              onPress={() => setNoteColor(option)}
-              key={option}
-              style={styles.radioContainer}
+    <ScrollView>
+      <View>
+        <Image
+          style={styles.image}
+          source={require("../../assets/image/create-screen.png")}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Title"
+          onChangeText={(text) => setTitle(text)}
+        />
+        <TextInput
+          placeholder="Description"
+          style={styles.input}
+          onChangeText={(text) => setDescription(text)}
+          multiline={true}
+        />
+        <View style={{ marginLeft: 15 }}>
+          <View>
+            <Text
+              preset="h4"
+              style={{ color: colors.grey, marginVertical: 10 }}
             >
-              <View
-                style={[
-                  styles.outerCircle,
-                  selected && styles.selectOuterCircle,
-                ]}
+              Select your note color
+            </Text>
+          </View>
+          {noteColors.map((option) => {
+            const selected = option === noteColor;
+            return (
+              <TouchableOpacity
+                onPress={() => setNoteColor(option)}
+                key={option}
+                style={styles.radioContainer}
               >
                 <View
                   style={[
-                    styles.innerCircle,
-                    selected && styles.selectInnerCircle,
+                    styles.outerCircle,
+                    selected && styles.selectOuterCircle,
                   ]}
-                />
-              </View>
-              <Text preset="">{option}</Text>
-            </TouchableOpacity>
-          );
-        })}
-        {/* ---------------submit--------------- */}
-        <TouchableOpacity onPress={() => handleCreate()}>
-          <Text preset="h4" style={styles.loginButton}>
-            Create
-          </Text>
-        </TouchableOpacity>
+                >
+                  <View
+                    style={[
+                      styles.innerCircle,
+                      selected && styles.selectInnerCircle,
+                    ]}
+                  />
+                </View>
+                <Text preset="small" style={{ color: "black", fontSize: 12 }}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+          {/* ---------------submit--------------- */}
+          <TouchableOpacity onPress={() => handleCreate()}>
+            <Text preset="h4" style={styles.loginButton}>
+              Create
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    alignSelf: "center",
+  },
   loginButton: {
-    color: colors.black,
+    color: colors.white,
     alignSelf: "center",
     marginTop: spacing[8],
     backgroundColor: colors.lightGreen,

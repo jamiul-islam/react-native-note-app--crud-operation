@@ -42,7 +42,6 @@ export default function SignUp({ navigation }) {
         email,
         password
       );
-      console.log(result.user);
 
       // 2. add user to fireStore database
       await addDoc(collection(db, "users"), {
@@ -145,24 +144,21 @@ export default function SignUp({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: spacing[8],
   },
   input: {
     height: 50,
-    borderColor: colors.white,
+    borderColor: colors.gray,
     borderBottomWidth: 1,
     marginBottom: 20,
   },
   inputView: {
-    marginTop: spacing[8],
     paddingHorizontal: 25,
-    paddingVertical: 15,
   },
   loginButton: {
-    color: colors.black,
+    color: colors.white,
     alignSelf: "center",
     marginTop: spacing[8],
-    backgroundColor: colors.lightGreen,
+    backgroundColor: colors.green,
     paddingVertical: 10,
     paddingHorizontal: 25,
     borderRadius: 30,

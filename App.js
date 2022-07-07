@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
@@ -15,7 +9,9 @@ import SignIn from "./src/screens/SignIn";
 import signup from "./src/screens/SignUp";
 import Edit from "./src/screens/Edit";
 import Create from "./src/screens/Create";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { colors } from "./src/themes";
+import WelcomeScreen from "./src/screens/WelcomeScreen";
 
 const auth = getAuth();
 
@@ -31,11 +27,6 @@ const AppTheme = {
 const Stack = createNativeStackNavigator();
 
 function App() {
-  // sign out
-  // useEffect(() => {
-  //   signOut(auth);
-  // }, []);
-
   // user authentication
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -88,15 +79,42 @@ function App() {
               <Stack.Screen name="Home" options={{ headerShown: false }}>
                 {(props) => <Home {...props} user={user} />}
               </Stack.Screen>
-              <Stack.Screen name="Edit" options={{ headerShown: true }}>
+              <Stack.Screen
+                name="Edit"
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    backgroundColor: colors.green,
+                  },
+                  headerTitleStyle: {
+                    color: "white",
+                  },
+                }}
+              >
                 {(props) => <Edit {...props} user={user} />}
               </Stack.Screen>
-              <Stack.Screen name="Create" options={{ headerShown: true }}>
+              <Stack.Screen
+                name="Create"
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    backgroundColor: colors.green,
+                  },
+                  headerTitleStyle: {
+                    color: "white",
+                  },
+                }}
+              >
                 {(props) => <Create {...props} user={user} />}
               </Stack.Screen>
             </>
           ) : (
             <>
+              <Stack.Screen
+                name="WelcomeScreen"
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="SignIn"
                 component={SignIn}
@@ -105,13 +123,21 @@ function App() {
               <Stack.Screen
                 name="SignUp"
                 component={signup}
-                options={{ headerShown: true }}
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    backgroundColor: colors.green,
+                  },
+                  headerTitleStyle: {
+                    color: "white",
+                  },
+                }}
               />
             </>
           )}
         </Stack.Navigator>
       </NavigationContainer>
-      <StatusBar />
+      <StatusBar backgroundColor={colors.green} />
     </View>
   );
 }
@@ -121,6 +147,6 @@ export default App;
 const styles = StyleSheet.create({
   androidSafeArea: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    // paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

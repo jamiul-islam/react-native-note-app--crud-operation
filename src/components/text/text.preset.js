@@ -3,17 +3,17 @@ import { colors, typography } from "../../themes/index";
 const BASE = {
   fontFamily: typography.primary,
   fontSize: 14,
-  color: colors.black,
+  color: colors.white,
 };
 
 const BASE_BOLD = {
   fontFamily: typography.primaryBold,
-  color: colors.black,
+  color: colors.white,
 };
 
 const BOLD = {
   fontFamily: typography.bold,
-  color: colors.black,
+  color: colors.white,
 };
 
 export const presets = {

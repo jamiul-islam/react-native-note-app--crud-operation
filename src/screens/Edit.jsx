@@ -1,8 +1,15 @@
-import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { colors, spacing } from "../themes";
 import Text from "../components/text/text";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { showMessage } from "react-native-flash-message";
 
@@ -13,6 +20,7 @@ export default function Edit({ navigation, route }) {
   const [title, setTitle] = React.useState(noteItem.title);
   const [description, setDescription] = React.useState(noteItem.description);
   const [noteColor, setNoteColor] = React.useState(noteItem.color);
+  const [loading, setLoading] = React.useState(true);
 
   const handleEdit = async () => {
     try {
@@ -22,18 +30,28 @@ export default function Edit({ navigation, route }) {
         description: description,
         color: noteColor,
       });
+      setLoading(false);
       showMessage({
-        message: "note updated successfully",
+        message: "Note updated successfully",
         type: "success",
       });
       navigation.goBack();
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      showMessage({
+        message: error.message,
+        type: "danger",
+      });
     }
   };
 
   return (
-    <View>
+    <ScrollView>
+      <Image
+        style={styles.image}
+        source={require("../../assets/image/edit-screen.png")}
+      />
       <TextInput
         style={styles.input}
         placeholder="Title"
@@ -74,7 +92,9 @@ export default function Edit({ navigation, route }) {
                   ]}
                 />
               </View>
-              <Text preset="">{option}</Text>
+              <Text preset="small" style={{ color: "black", fontSize: 12 }}>
+                {option}
+              </Text>
             </TouchableOpacity>
           );
         })}
@@ -85,13 +105,18 @@ export default function Edit({ navigation, route }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    alignSelf: "center",
+  },
   loginButton: {
-    color: colors.black,
+    color: colors.white,
     alignSelf: "center",
     marginTop: spacing[8],
     backgroundColor: colors.lightGreen,
