@@ -8,7 +8,7 @@ import { showMessage } from "react-native-flash-message";
 
 const noteColors = Object.keys(colors).slice(0, 7);
 
-export default function Edit({ navigation, user, route }) {
+export default function Edit({ navigation, route }) {
   const noteItem = route.params.note;
   const [title, setTitle] = React.useState(noteItem.title);
   const [description, setDescription] = React.useState(noteItem.description);
@@ -17,11 +17,10 @@ export default function Edit({ navigation, user, route }) {
   const handleEdit = async () => {
     try {
       // create operation of CRUD
-      await updateDoc(doc(db, "notes"), noteItem.title, {
+      await updateDoc(doc(db, "notes", noteItem.id), {
         title: title,
         description: description,
         color: noteColor,
-        uid: user.uid,
       });
       showMessage({
         message: "note updated successfully",
