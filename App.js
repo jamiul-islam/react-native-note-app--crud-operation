@@ -15,7 +15,7 @@ import WelcomeScreen from "./src/screens/WelcomeScreen";
 
 const auth = getAuth();
 
-// custom white theme
+// a custom white theme
 const AppTheme = {
   ...DefaultTheme,
   colors: {
